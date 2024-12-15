@@ -30,16 +30,31 @@ public class dayTwo_exOne {
 			answer += issafe(strList.getFirst());
 			strList.removeFirst();
 		}
-
 		return answer;
 	}
 
 	static private int issafe(String str) {
 		int safe = 1;
+		boolean increasing = false;
+		boolean decreasing = false;
 		String[] strArray = str.split(" ");
 		
-		for(int i = 0; i < strArray.length; i++) {
+		for(int i = 0; safe == 1 && (i < strArray.length - 1); i++) {
+			Integer current = Integer.parseInt(strArray[i]);
+			Integer next = Integer.parseInt(strArray[i + 1]);
 			System.out.println("strArray[" + i + "]: " + strArray[i]);
+			System.out.println("current: " + current);
+			System.out.println("next: " + next);
+
+			if (current < next)
+				increasing = true;
+			else
+				decreasing = true;
+			
+			if (increasing == true && decreasing == true)
+				safe = 0;
+
+			
 		}
 		return safe;
 	}
