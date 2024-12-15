@@ -27,7 +27,10 @@ public class dayTwo_exOne {
 		int answer = 0;
 
 		while (!strList.isEmpty()) {
-			answer += issafe(strList.getFirst());
+			int returnval = issafe(strList.getFirst());
+			System.out.println("ret val: " + returnval);
+			answer += returnval;
+			
 			strList.removeFirst();
 		}
 		return answer;
@@ -38,24 +41,56 @@ public class dayTwo_exOne {
 		boolean increasing = false;
 		boolean decreasing = false;
 		String[] strArray = str.split(" ");
+
+		System.out.println("start: " + strArray[0] + " " + strArray[1]);
 		
+		boolean skipped = false;
 		for(int i = 0; safe == 1 && (i < strArray.length - 1); i++) {
 			Integer current = Integer.parseInt(strArray[i]);
 			Integer next = Integer.parseInt(strArray[i + 1]);
-			System.out.println("strArray[" + i + "]: " + strArray[i]);
-			System.out.println("current: " + current);
-			System.out.println("next: " + next);
+			Integer third = -1;
+			if (i < strArray.length - 2) {
+				third = Integer.parseInt(strArray[i + 2]);
+			}
 
-			if (current < next)
-				increasing = true;
-			else
-				decreasing = true;
+			if (smallissafe(current, next, increasing, decreasing) == 1)
+				return 1;
 			
-			if (increasing == true && decreasing == true)
-				safe = 0;
-
-			
+			if (third != -1 && skipped == false) {
+				skipped = true;
+				safe = smallissafe(current, third, increasing, decreasing);
+				i++;
+			}
 		}
+		System.out.println(" safe: " + safe);
 		return safe;
+	}
+
+	static private int smallissafe(Integer current, Integer next, boolean increasing, boolean decreasing) {
+		switch (current.compareTo(next)) {
+			case 0 :
+				System.out.println("same");
+				return 0;
+
+			case 1 :
+				System.out.println("decreasing");
+				decreasing = true;
+				if (current - next > 3)
+					return 0;
+				break;
+
+			case -1 :
+				System.out.println("increasing");
+				increasing = true;
+				if (next - current > 3)
+					return 0;
+				break;
+		}
+
+		if (increasing == true && decreasing == true) {
+			return 0;
+		}
+
+		return 1;
 	}
 }
